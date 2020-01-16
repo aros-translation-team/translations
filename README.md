@@ -1,6 +1,10 @@
 Please Note:
 ============
 
+to synchronise the repository with the individual catalog submodules, use ...
+
+* git submodule update --remote --merge
+
 to push changes from the translation teams repository, to the official developer team mirror, please do the following...
 
 Initial Setup:
