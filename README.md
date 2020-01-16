@@ -1,9 +1,15 @@
 Please Note:
 ============
 
+Updating the submodules
+-----------------------
+
 to synchronise the repository with the individual catalog submodules, use ...
 
 * git submodule update --remote --merge
+
+Updating the AROS developer mirror
+----------------------------------
 
 to push changes from the translation teams repository, to the official developer team mirror, please do the following...
 
