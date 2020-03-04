@@ -154,6 +154,9 @@
 [submodule "workbench/prefs/Zune/catalogs"]
 	path = workbench/prefs/Zune/catalogs
 	url = https://github.com/aros-translation-team/zune-prefs.git
+[submodule "workbench/network/stacks/AROSTCP/MUI.MiamiPanel/catalogs"]
+	path = workbench/network/stacks/AROSTCP/MUI.MiamiPanel/catalogs
+	url = https://github.com/aros-translation-team/miamipanel.git
 [submodule "workbench/system/BHFormat/catalogs"]
 	path = workbench/system/BHFormat/catalogs
 	url = https://github.com/aros-translation-team/format.git
@@ -166,6 +169,21 @@
 [submodule "workbench/system/Snoopy/catalogs"]
 	path = workbench/system/Snoopy/catalogs
 	url = https://github.com/aros-translation-team/snoopy.git
+[submodule "workbench/system/Wanderer/Tools/DiskInfo/catalogs"]
+	path = workbench/system/Wanderer/Tools/DiskInfo/catalogs
+	url = https://github.com/aros-translation-team/diskinfo.git
+[submodule "workbench/system/Wanderer/Tools/ExecuteCommand/catalogs"]
+	path = workbench/system/Wanderer/Tools/ExecuteCommand/catalogs
+	url = https://github.com/aros-translation-team/executecommand.git
+[submodule "workbench/system/Wanderer/Tools/ExecuteStartup/catalogs"]
+	path = workbench/system/Wanderer/Tools/ExecuteStartup/catalogs
+	url = https://github.com/aros-translation-team/executestartup.git
+[submodule "workbench/system/Wanderer/Tools/WBNewDrawer/catalogs"]
+	path = workbench/system/Wanderer/Tools/WBNewDrawer/catalogs
+	url = https://github.com/aros-translation-team/wbnewdrawer.git
+[submodule "workbench/system/Wanderer/Tools/WBRename/catalogs"]
+	path = workbench/system/Wanderer/Tools/WBRename/catalogs
+	url = https://github.com/aros-translation-team/wbrename.git
 [submodule "workbench/tools/Edit/catalogs"]
 	path = workbench/tools/Edit/catalogs
 	url = https://github.com/aros-translation-team/editor.git
