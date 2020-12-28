@@ -196,3 +196,6 @@
 [submodule "workbench/tools/WiMP/catalogs"]
 	path = workbench/tools/WiMP/catalogs
 	url = https://github.com/aros-translation-team/wimp.git
+[submodule "workbench/system/Wanderer/Tools/Info/catalogs"]
+	path = workbench/system/Wanderer/Tools/Info/catalogs
+	url = https://github.com/aros-translation-team/info.git
