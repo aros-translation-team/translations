@@ -5,6 +5,8 @@
 
 import re, os, glob, sys
 
+import chardet
+
 # regex for parsing .gitmodules
 re_path = re.compile("^\s*?path = (.*)$", re.MULTILINE)
 
@@ -41,7 +43,7 @@ languages = {
     "spanish.ct":       (0, "ISO-8859-1", "español"),
     "swedish.ct":       (0, "ISO-8859-1", "svenska"),
     "bosnian.ct":       (5, "ISO-8859-2", "unknown"),
-    "croatian.ct":      (5, "ISO-8859-2", "hrvatski"),
+    "croatian.ct":      (5, "Windows-1252", "hrvatski"), # Windows-1252 or ISO-8859-2 ?
     "czech.ct":         (5, "ISO-8859-2", "czech"),
     "hungarian.ct":     (5, "ISO-8859-2", "magyar"),
     "rumanian.ct":      (5, "ISO-8859-2", "unknown"),
@@ -57,7 +59,7 @@ languages = {
     "serbian.ct":       (8, "ISO-8859-5", "srpski"),
     "ukrainian.ct":     (8, "ISO-8859-5", "unknown"),
     "turkish.ct":       (12, "ISO-8859-9", "türkçe"),
-    "russian.ct":       (2104, "WINDOWS-1251", "russian")
+    "russian.ct":       (2104, "windows-1251", "russian")
 }
 
 # for colored output
@@ -71,8 +73,6 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-
-
 
 def get_required_version(catalog_path):
     retval = -1
@@ -161,3 +161,21 @@ for module_path in module_path_iter:
             if required_version != vversion:
                 print(bcolors.WARNING, "Requird version mismatch in file", ct_file_name)
                 print("Is:", vversion, "Required:", required_version, bcolors.ENDC)
+                
+
+        # check encoding
+        rawdata = open(ct_file_name, "rb").read()
+        result = chardet.detect(rawdata)
+        charenc = result['encoding']
+
+        if charenc == "ascii":
+            pass
+        elif charenc == "utf-8":
+            print(bcolors.FAIL, "Encoding error UTF8 in file", ct_file_name, bcolors.ENDC)
+            #sys.exit(1)
+        elif charenc == charset:
+            pass
+        elif charenc == "ISO-8859-1":
+            pass
+        else:
+            print(bcolors.WARNING, "Encoding mismatch in file", ct_file_name, charenc, bcolors.ENDC)
