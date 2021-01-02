@@ -158,8 +158,11 @@ for module_path in module_path_iter:
 
         # check required version
         if required_version !=-1:
-            if required_version != vversion:
-                print(bcolors.WARNING, "Requird version mismatch in file", ct_file_name)
+            if required_version > vversion:
+                print(bcolors.WARNING, "Catalog version is lower than the required version in file", ct_file_name)
+                print("Is:", vversion, "Required:", required_version, bcolors.ENDC)
+            elif required_version < vversion:
+                print(bcolors.FAIL, "Catalog version is higher than the required version in file", ct_file_name)
                 print("Is:", vversion, "Required:", required_version, bcolors.ENDC)
                 
 
