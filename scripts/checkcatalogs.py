@@ -7,6 +7,84 @@ import re, os, glob, sys
 
 import chardet
 
+################################################################################
+
+class Module(object):
+    def __init__(self, name, required_version):
+        self.name = name
+        self.required_version = required_version
+        self.language_dict = {} # dictionary with language : available version
+
+    def get_version(self, language):
+        return self.language_dict[language]
+
+    def get_name(self):
+        return self.name
+    
+    def get_required_version(self):
+        return self.required_version
+    
+    def add_version(self, language, version):
+        if language.endswith(".ct"):
+            language = language[0:-3]
+        self.language_dict[language] = version
+
+    def get_languages(self, languages):
+        for language in self.language_dict:
+            if not language in languages:
+                languages.append(language)
+                
+    def get_version(self, language):
+        if language in self.language_dict:
+            return self.language_dict[language]
+        else:
+            return "n/a"
+        
+################################################################################
+        
+class Report(object):
+    def __init__(self):
+        self.modules = [] # list of Module objects
+
+    def add_module(self, module):
+        self.modules.append(module)
+    
+    def write_rst(self, fh):
+        # create a list with all used languages
+        languages = []
+        
+        for module in self.modules:
+            module.get_languages(languages)
+
+        languages.sort()
+        
+        # create reST table separator
+        tablesep = "=" * 59 + " " + "====== "
+        for language in languages:
+            tablesep += "=" * 14 + " "
+        tablesep += "\n"
+        
+        # print table header
+        fh.write(tablesep)
+        fh.write("Module" + " " * 54 + "Req. V ")
+
+        for language in languages:
+            fh.write(f"{language:15}")
+        fh.write("\n")
+        fh.write(tablesep)
+
+        for module in self.modules:
+            fh.write(f"{module.get_name():60}")
+            fh.write(str(module.get_required_version()).ljust(7))
+            for language in languages:
+                fh.write(str(module.get_version(language)).ljust(15))
+            fh.write("\n")
+        
+        fh.write(tablesep)
+        fh.write("\n\n")
+
+################################################################################
+
 # regex for parsing .gitmodules
 re_path = re.compile("^\s*?path = (.*)$", re.MULTILINE)
 
@@ -74,6 +152,8 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+################################################################################
+
 def get_required_version(catalog_path):
     retval = -1
     
@@ -91,6 +171,7 @@ def get_required_version(catalog_path):
 
     return int(retval)
 
+################################################################################
 
 # read all paths from .gitmodules
 module_file = open("../.gitmodules", "r")
@@ -98,14 +179,20 @@ module_file_content = module_file.read()
 module_path_iter = re_path.finditer(module_file_content)
 module_file.close()
 
+report = Report()
+
 # loop through all submodules
 for module_path in module_path_iter:
-    catalog_path = os.path.join("..", module_path.group(1))
+    module_name = module_path.group(1)
+    catalog_path = os.path.join("..", module_name)
     print("checking directory", catalog_path)
 
     required_version = get_required_version(catalog_path)
     
     ct_file_names = glob.glob(catalog_path + "/*.ct")
+    
+    module = Module(module_name, required_version)
+    report.add_module(module)
     
     # loop through all CT files in a directory
     for ct_file_name in ct_file_names:
@@ -182,3 +269,10 @@ for module_path in module_path_iter:
             pass
         else:
             print(bcolors.WARNING, "Encoding mismatch in file", ct_file_name, charenc, bcolors.ENDC)
+
+        module.add_version(ct_file_lang, vversion)
+
+
+print("-" * 80)
+with open("test.rst", "w") as fh:
+    report.write_rst(fh)
