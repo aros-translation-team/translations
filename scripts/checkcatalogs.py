@@ -3,7 +3,8 @@
 # script for checking of the correctness of the catalog files (cd, ct)
 # before running the script the submodules must be updated
 
-import re, os, glob, sys
+import re, os, glob, sys, pytz
+from datetime import datetime
 
 import chardet
 
@@ -21,9 +22,36 @@ class Module(object):
     def get_name(self):
         return self.name
     
+    def get_name_as_field(self, len):
+        return self.get_name().ljust(len)
+
     def get_required_version(self):
         return self.required_version
     
+    def get_required_version_as_field(self, len):
+        version = self.get_required_version()
+        if version >= 0:
+            return str(version).ljust(len)
+        else:
+            return ("**n/a**").ljust(len)
+
+    def get_version(self, language):
+        if language in self.language_dict:
+            return self.language_dict[language]
+        else:
+            return "n/a"
+
+    def get_version_as_field(self, language, len):
+        version = self.get_version(language)
+        required_version = self.get_required_version()
+        if version != "n/a":
+            if version < required_version:
+                return ("**" + str(version) + "**").ljust(len)
+            else:
+                return str(version).ljust(len)
+        else:
+            return ("**n/a**").ljust(len)
+
     def add_version(self, language, version):
         if language.endswith(".ct"):
             language = language[0:-3]
@@ -34,11 +62,6 @@ class Module(object):
             if not language in languages:
                 languages.append(language)
                 
-    def get_version(self, language):
-        if language in self.language_dict:
-            return self.language_dict[language]
-        else:
-            return "n/a"
         
 ################################################################################
         
@@ -59,14 +82,14 @@ class Report(object):
         languages.sort()
         
         # create reST table separator
-        tablesep = "=" * 59 + " " + "====== "
+        tablesep = "=" * 59 + " " + "================ "
         for language in languages:
             tablesep += "=" * 14 + " "
         tablesep += "\n"
         
         # print table header
         fh.write(tablesep)
-        fh.write("Module" + " " * 54 + "Req. V ")
+        fh.write("Module" + " " * 54 + "Required Version ")
 
         for language in languages:
             fh.write(f"{language:15}")
@@ -74,10 +97,10 @@ class Report(object):
         fh.write(tablesep)
 
         for module in self.modules:
-            fh.write(f"{module.get_name():60}")
-            fh.write(str(module.get_required_version()).ljust(7))
+            fh.write(module.get_name_as_field(60))
+            fh.write(module.get_required_version_as_field(17))
             for language in languages:
-                fh.write(str(module.get_version(language)).ljust(15))
+                fh.write(module.get_version_as_field(language, 15))
             fh.write("\n")
         
         fh.write(tablesep)
@@ -274,5 +297,14 @@ for module_path in module_path_iter:
 
 
 print("-" * 80)
+
+# create the reST file
 with open("test.rst", "w") as fh:
+    fh.write("=============\n")
+    fh.write("Catalog Check\n")
+    fh.write("=============\n\n")
+
+    now = datetime.now(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
+    fh.write("created on " + now + "\n\n")
+
     report.write_rst(fh)
