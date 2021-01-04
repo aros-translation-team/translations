@@ -55,6 +55,8 @@ class Module(object):
     def add_version(self, language, version):
         if language.endswith(".ct"):
             language = language[0:-3]
+        # 1st letter upper case
+        language = language[0].upper() + language[1:]
         self.language_dict[language] = version
 
     def get_languages(self, languages):
@@ -72,6 +74,32 @@ class Report(object):
     def add_module(self, module):
         self.modules.append(module)
     
+    def write_subtable_rst(self, languages, start, end):
+        # create reST table separator
+        tablesep = "=" * 59 + " " + "================ "
+        for language in range(start, end):
+            tablesep += "=" * 14 + " "
+        tablesep += "\n"
+        
+        # print table header
+        fh.write(tablesep)
+        fh.write("Module" + " " * 54 + "Required Version ")
+
+        for language_index in range(start, end):
+            fh.write(f"{languages[language_index]:15}")
+        fh.write("\n")
+        fh.write(tablesep)
+
+        for module in self.modules:
+            fh.write(module.get_name_as_field(60))
+            fh.write(module.get_required_version_as_field(17))
+            for language_index in range(start, end):
+                fh.write(module.get_version_as_field(languages[language_index], 15))
+            fh.write("\n")
+        
+        fh.write(tablesep)
+        fh.write("\n\n")
+        
     def write_rst(self, fh):
         # create a list with all used languages
         languages = []
@@ -81,30 +109,10 @@ class Report(object):
 
         languages.sort()
         
-        # create reST table separator
-        tablesep = "=" * 59 + " " + "================ "
-        for language in languages:
-            tablesep += "=" * 14 + " "
-        tablesep += "\n"
-        
-        # print table header
-        fh.write(tablesep)
-        fh.write("Module" + " " * 54 + "Required Version ")
-
-        for language in languages:
-            fh.write(f"{language:15}")
-        fh.write("\n")
-        fh.write(tablesep)
-
-        for module in self.modules:
-            fh.write(module.get_name_as_field(60))
-            fh.write(module.get_required_version_as_field(17))
-            for language in languages:
-                fh.write(module.get_version_as_field(language, 15))
-            fh.write("\n")
-        
-        fh.write(tablesep)
-        fh.write("\n\n")
+        # we create 3 tables because of its width
+        self.write_subtable_rst(languages, 0, 6)
+        self.write_subtable_rst(languages, 6, 12)
+        self.write_subtable_rst(languages, 12, len(languages))
 
 ################################################################################
 
@@ -303,8 +311,13 @@ with open("test.rst", "w") as fh:
     fh.write("=============\n")
     fh.write("Catalog Check\n")
     fh.write("=============\n\n")
-
+    fh.write("This tables are showing a comparison of the catalog version number\n")
+    fh.write("a module wants to open and the version of the \*.ct (catalog translation) files.\n\n")
+    fh.write("If a catalog's version is highlighted it means:\n\n")
+    fh.write("+ n/a (catalog isn't available at all)\n")
+    fh.write("+ catalog has a lower version than the required version\n\n")
+    
     now = datetime.now(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
-    fh.write("created on " + now + "\n\n")
+    fh.write("Created on UTC " + now + ".\n\n")
 
     report.write_rst(fh)
