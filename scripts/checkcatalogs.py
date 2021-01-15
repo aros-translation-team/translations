@@ -244,17 +244,25 @@ for module_path in module_path_iter:
         ct_file_content = ct_file.read()
         ct_file.close()
         match = re_ct_code.search(ct_file_content)
-        if int(match.group(1)) != iana_num:
-            print("Codeset error in file", ct_file_name)
-            print("IANA num doesn't match! Is: ", match.group(1), "Required:", iana_num)
+        if match:
+            if int(match.group(1)) != iana_num:
+                print(bcolors.FAIL, "Codeset error in file", ct_file_name)
+                print("IANA num doesn't match! Is: ", match.group(1), "Required:", iana_num, bcolors.ENDC)
+                sys.exit(1)
+        else:
+            print(bcolors.FAIL, "Error in ## codeset of file", ct_file_name, bcolors.ENDC)
             sys.exit(1)
         
         # check ## version
         match = re_ct_ver.search(ct_file_content)
-        vversion = int(match.group(1))
-        if vversion == 0:
-            print("Version error in file", ct_file_name)
-            print("Version number must be > 0! Is: ", match.group(1))
+        if match:
+            vversion = int(match.group(1))
+            if vversion == 0:
+                print(bcolors.FAIL, "Version error in file", ct_file_name)
+                print("Version number must be > 0! Is: ", match.group(1), bcolors.ENDC)
+                sys.exit(1)
+        else:
+            print(bcolors.FAIL, "Error in ## version of file", ct_file_name, bcolors.ENDC)
             sys.exit(1)
             
         vday = int(match.group(2))
@@ -262,17 +270,22 @@ for module_path in module_path_iter:
         vyear = int(match.group(4))
         if vday < 1 or vday > 31 or vmonth < 1 or vmonth > 12 \
             or vyear < 1980 or vyear > 2050:
-            print("Version error in file", ct_file_name)
+            print(bcolors.FAIL, "Version error in file", ct_file_name)
             print("Invalid values for date! Is: ",
-                match.group(2), match.group(3), match.group(4))
+                match.group(2), match.group(3), match.group(4), bcolors.ENDC)
             sys.exit(1)
 
         # check ## language
         match = re_ct_lang.search(ct_file_content)
-        if match.group(1) != native_language:
-            print("Language error in file", ct_file_name)
-            print("Language doesn't match! Is: ", match.group(1), "Required:", native_language)
+        if match:
+            if match.group(1) != native_language:
+                print(bcolors.FAIL, "Language error in file", ct_file_name)
+                print("Language doesn't match! Is: ", match.group(1), "Required:", native_language, bcolors.ENDC)
+                sys.exit(1)
+        else:
+            print(bcolors.FAIL, "Error in ## language of file", ct_file_name, bcolors.ENDC)
             sys.exit(1)
+
 
         # check required version
         if required_version !=-1:
@@ -293,7 +306,7 @@ for module_path in module_path_iter:
             pass
         elif charenc == "utf-8":
             print(bcolors.FAIL, "Encoding error UTF8 in file", ct_file_name, bcolors.ENDC)
-            #sys.exit(1)
+            sys.exit(1)
         elif charenc == charset:
             pass
         elif charenc == "ISO-8859-1":
@@ -307,7 +320,7 @@ for module_path in module_path_iter:
 print("-" * 80)
 
 # create the reST file
-with open("test.rst", "w") as fh:
+with open("checkresult.rst", "w") as fh:
     fh.write("=============\n")
     fh.write("Catalog Check\n")
     fh.write("=============\n\n")
