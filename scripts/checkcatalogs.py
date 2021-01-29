@@ -39,12 +39,12 @@ class Module(object):
         if language in self.language_dict:
             return self.language_dict[language]
         else:
-            return "n/a"
+            return -1
 
     def get_version_as_field(self, language, len):
         version = self.get_version(language)
         required_version = self.get_required_version()
-        if version != "n/a":
+        if version >= 0:
             if version < required_version:
                 return ("**" + str(version) + "**").ljust(len)
             else:
@@ -74,6 +74,13 @@ class Report(object):
     def add_module(self, module):
         self.modules.append(module)
     
+    def compare_version(self, required_version, available_version):
+        if required_version >= 0 \
+                and available_version >= 0 \
+                and required_version == available_version:
+            return 1
+        return 0
+
     def write_subtable_rst(self, languages, start, end):
         # create reST table separator
         tablesep = "=" * 59 + " " + "================ "
@@ -113,6 +120,23 @@ class Report(object):
         self.write_subtable_rst(languages, 0, 6)
         self.write_subtable_rst(languages, 6, 12)
         self.write_subtable_rst(languages, 12, len(languages))
+
+        tablesep = "========== ========\n"
+        fh.write(tablesep)
+        fh.write("Language   Done [%]\n")
+        fh.write(tablesep)
+        # summary per language
+        for lang in languages:
+            done = 0
+            fh.write(lang.ljust(10))
+            for module in self.modules:
+                required_version = module.get_required_version()
+                lang_version = module.get_version(lang)
+                done += self.compare_version(required_version, lang_version)
+            fh.write(" %.1f" % (done / len(self.modules) * 100.0))
+            fh.write("\n")
+        fh.write(tablesep)
+            
 
 ################################################################################
 
