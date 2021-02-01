@@ -145,7 +145,7 @@ re_path = re.compile("^\s*?path = (.*)$", re.MULTILINE)
 
 # regex for parsing ## version in a CT file
 re_ct_ver = re.compile(r"""
-^\#\#\s+version\s+\$VER:\s+\w+?\.catalog\s+
+^\#\#\s+version\s+\$VER:\s+[\w\.]+?\.catalog\s+
 (\d+)\.\d+\s+\((\d\d)\.(\d\d)\.(\d\d\d\d)\).*?$
 """, re.MULTILINE | re.VERBOSE)
 
