@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: iso-8859-1 -*-
 
 # script for checking of the correctness of the catalog files (cd, ct)
 # before running the script the submodules must be updated
@@ -161,19 +162,19 @@ re_ct_reqver = re.compile(r"^#define\s+CATALOG_VERSION\s+(\d+)$", re.MULTILINE)
 
 languages = {
     "albanian.ct":      (0, "ISO-8859-1", "unknown"),
-    "catalan.ct":       (0, "ISO-8859-1", "catalÃ "),
+    "catalan.ct":       (0, "ISO-8859-1", "català"),
     "danish.ct":        (0, "ISO-8859-1", "dansk"),
     "dutch.ct":         (0, "ISO-8859-1", "nederlands"),
     "faroese.ct":       (0, "ISO-8859-1", "unknown"),
     "finnish.ct":       (0, "ISO-8859-1", "suomi"),
-    "french.ct":        (0, "ISO-8859-1", "franÃ§ais"),
+    "french.ct":        (0, "ISO-8859-1", "français"),
     "german.ct":        (0, "ISO-8859-1", "deutsch"),
     "irish.ct":         (0, "ISO-8859-1", "unknown"),
     "icelandic.ct":     (0, "ISO-8859-1", "unknown"),
     "italian.ct":       (0, "ISO-8859-1", "italiano"),
     "norwegian.ct":     (0, "ISO-8859-1", "norsk"),
-    "portuguese.ct":    (0, "ISO-8859-1", "portuguÃªs"),
-    "spanish.ct":       (0, "ISO-8859-1", "espaÃ±ol"),
+    "portuguese.ct":    (0, "ISO-8859-1", "português"),
+    "spanish.ct":       (0, "ISO-8859-1", "español"),
     "swedish.ct":       (0, "ISO-8859-1", "svenska"),
     "bosnian.ct":       (5, "ISO-8859-2", "unknown"),
     "croatian.ct":      (5, "Windows-1252", "hrvatski"), # Windows-1252 or ISO-8859-2 ?
@@ -191,7 +192,7 @@ languages = {
     "macedonian.ct":    (8, "ISO-8859-5", "unknown"),
     "serbian.ct":       (8, "ISO-8859-5", "srpski"),
     "ukrainian.ct":     (8, "ISO-8859-5", "unknown"),
-    "turkish.ct":       (12, "ISO-8859-9", "tÃ¼rkÃ§e"),
+    "turkish.ct":       (12, "ISO-8859-9", "türkçe"),
     "russian.ct":       (2104, "windows-1251", "russian")
 }
 
