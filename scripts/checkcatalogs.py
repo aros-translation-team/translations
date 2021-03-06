@@ -229,6 +229,8 @@ def get_required_version(catalog_path):
 
 ################################################################################
 
+check_with_flexcat = True # needs tool flexcat in search path
+
 # read all paths from .gitmodules
 module_file = open("../.gitmodules", "r")
 module_file_content = module_file.read()
@@ -320,7 +322,15 @@ for module_path in module_path_iter:
             elif required_version < vversion:
                 print(bcolors.FAIL, "Catalog version is higher than the required version in file", ct_file_name)
                 print("Is:", vversion, "Required:", required_version, bcolors.ENDC)
-                
+            elif check_with_flexcat:
+                # if versions match we check correctness with flexcat
+                cd_file_names = glob.glob(catalog_path + "/*.cd")
+                if len(cd_file_names) == 1:
+                    flexcmd = "flexcat {} {} catalog dummy.catalog".format(cd_file_names[0], ct_file_name)
+                    res = os.system(flexcmd)
+                    if res != 0:
+                        print(bcolors.FAIL, "flexcat returned error code", res, "for file", ct_file_name, bcolors.ENDC)
+                        sys.exit(1)
 
         # check encoding
         rawdata = open(ct_file_name, "rb").read()
