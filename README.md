@@ -42,7 +42,7 @@ Then update the translations repository, first checking the mode using ls-files
 e.g.
 * git update-index --cacheinfo 160000,03d7dff560ac8ed64f16e763204b04ce91ca5faf,workbench/system/AboutAROS/catalogs
 
-Then commit and push the changes.
+Then commit and push the changes. Repeat this process for the submodules in the main AROS repository.
 
 Updating the AROS Developer mirror
 ----------------------------------
