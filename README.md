@@ -31,14 +31,14 @@ to synchronise the repository with the individual catalog submodules, use ...
 
 Checkout the modules repository and find out the current heads sha1 -:
 
-* cd <module path>
+* cd "module path"
 * git rev-list HEAD
 
 Then update the translations repository, first checking the mode using ls-files
 
-* cd <translations path>
-* git ls-files --stage <submodule path>
-* git update-index --cacheinfo <mode from ls-files>,<sha1 commit id from module>,<submodule path>
+* cd "translations path"
+* git ls-files --stage "submodule path"
+* git update-index --cacheinfo "mode from ls-files","sha1 commit id from module","submodule path"
 
 e.g.
 * git update-index --cacheinfo 160000,03d7dff560ac8ed64f16e763204b04ce91ca5faf,workbench/system/AboutAROS/catalogs
