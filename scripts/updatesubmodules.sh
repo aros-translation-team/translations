@@ -10,7 +10,7 @@ git pull
 git submodule init
 
 # update the submodules
-git submodule update --remote --merge
+git submodule update
 
 # checkout master so that we can work on them
-git submodule foreach git checkout master
+git submodule foreach 'git checkout master && git pull'
