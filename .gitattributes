@@ -11,6 +11,7 @@
 *.cd                 text encoding=ISO-8859-1
 
 albanian.ct          text encoding=ISO-8859-1
+basque.ct            text encoding=ISO-8859-1
 catalan.ct           text encoding=ISO-8859-1
 danish.ct            text encoding=ISO-8859-1
 dutch.ct             text encoding=ISO-8859-1
@@ -52,8 +53,11 @@ lithuanian.ct        text encoding=ISO-8859-4
 #
 bulgarian.ct         text encoding=ISO-8859-5
 macedonian.ct        text encoding=ISO-8859-5
-serbian.ct           text encoding=ISO-8859-5
 ukrainian.ct         text encoding=ISO-8859-5
+
+# Serbian is Latin script, stored using the CP852 (Amiga) byte mapping
+#
+serbian.ct           text encoding=CP852
 
 # ISO-8859-9
 #

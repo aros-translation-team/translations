@@ -190,7 +190,7 @@ languages = {
     "lithuanian.ct":    (7, "ISO-8859-4", "unknown"),
     "bulgarian.ct":     (8, "ISO-8859-5", "unknown"),
     "macedonian.ct":    (8, "ISO-8859-5", "unknown"),
-    "serbian.ct":       (8, "ISO-8859-5", "srpski"),
+    "serbian.ct":       (8, "CP852", "srpski"), # Latin script, CP852 (Amiga) byte mapping
     "ukrainian.ct":     (8, "ISO-8859-5", "unknown"),
     "turkish.ct":       (12, "ISO-8859-9", "türkçe"),
     "russian.ct":       (2104, "windows-1251", "russian")
