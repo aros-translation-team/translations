@@ -3,3 +3,5 @@ scripts/dummy.catalog
 scripts/checkresult/
 scripts/encodingresult.rst
 scripts/encodingresult/
+scripts/entryresult.rst
+scripts/entryresult/
