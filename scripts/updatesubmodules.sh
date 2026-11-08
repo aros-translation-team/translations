@@ -3,7 +3,7 @@
 # enable command echo
 set -x
 
-git checkout master
+git checkout master || git checkout main
 git pull
 
 # ensure that the new submodules exist in .gitmodules
@@ -13,4 +13,4 @@ git submodule init
 git submodule update
 
 # checkout master so that we can work on them
-git submodule foreach 'git checkout master && git pull'
+git submodule foreach '(git checkout master || git checkout main) && git pull'
